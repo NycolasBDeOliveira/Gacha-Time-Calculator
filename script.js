@@ -5,18 +5,75 @@ const seconds = document.getElementById("seconds");
 const cost = document.getElementById("cost");
 
 const resetButton = document.getElementById("resetButton");
+const fastButton = document.getElementById("fastButton");
+const normalButton = document.getElementById("normalButton");
 
+// Formatação de números
 const format = value =>
     Math.floor(value).toLocaleString("pt-BR");
 
-function calculate() {
+// Converte K, M e B em valores numéricos
+function parseMoney(value) {
+    const normalized = value.trim().toUpperCase().replace(",", ".");
+    const match = normalized.match(/^(\d+(?:\.\d+)?)\s*([KMB])?$/);
 
-    const availableMoney = Number(money.value);
+    if (!match) return NaN;
+
+    const number = Number(match[1]);
+    const suffix = match[2];
+
+    const multipliers = {
+        K: 1_000,
+        M: 1_000_000,
+        B: 1_000_000_000
+    };
+
+    return number * (multipliers[suffix] || 1);
+}
+
+// Converte valores numéricos para K, M e B
+function abbreviateMoney(value) {
+    if (!Number.isFinite(value)) return value;
+
+    const abs = Math.abs(value);
+
+    if (abs >= 1_000_000_000) {
+        return (value / 1_000_000_000)
+            .toString()
+            .replace(".", ",") + "B";
+    }
+
+    if (abs >= 1_000_000) {
+        return (value / 1_000_000)
+            .toString()
+            .replace(".", ",") + "M";
+    }
+
+    if (abs >= 1_000) {
+        return (value / 1_000)
+            .toString()
+            .replace(".", ",") + "K";
+    }
+
+    return value.toString();
+}
+
+// Formata o campo ao sair dele
+function formatMoneyInput(input) {
+    const value = parseMoney(input.value);
+
+    if (Number.isFinite(value) && value >= 0) {
+        input.value = abbreviateMoney(value);
+    }
+}
+
+// Função principal de cálculo
+function calculate() {
+    const availableMoney = parseMoney(money.value);
     const starsPerSpin = Number(stars.value);
     const timePerSpin = Number(seconds.value);
-    const costPerStar = Number(cost.value);
+    const costPerStar = parseMoney(cost.value);
 
-    // Validar valores
     if (
         money.value.trim() === "" ||
         stars.value.trim() === "" ||
@@ -36,29 +93,23 @@ function calculate() {
         document.getElementById("totalStars").textContent = "--";
         document.getElementById("spinCost").textContent = "--";
         document.getElementById("remaining").textContent = "--";
-
         return;
     }
 
-    // Custo total de cada giro
     const costPerSpin = starsPerSpin * costPerStar;
 
-    // Quantidade máxima de giros
     const totalSpins = Math.floor(
         availableMoney / costPerSpin
     );
 
-    // Total de estrelas obtidas
     const totalStars = totalSpins * starsPerSpin;
 
-    // Dinheiro restante
     const remainingMoney =
         availableMoney - (totalSpins * costPerSpin);
 
-    // Tempo total em segundos
     const totalTime = totalSpins * timePerSpin;
 
-    // Conversão para horas, minutos e segundos
+    // Conversão do tempo
     const hours = Math.floor(totalTime / 3600);
 
     const minutes = Math.floor(
@@ -67,7 +118,7 @@ function calculate() {
 
     const secs = Math.floor(totalTime % 60);
 
-    // Atualizar interface
+    // Atualização dos resultados
     document.getElementById("time").textContent =
         `${format(hours)}h ${format(minutes)}min ${format(secs)}s`;
 
@@ -84,6 +135,29 @@ function calculate() {
         format(remainingMoney);
 }
 
+// Conversão automática ao sair do campo
+money.addEventListener("blur", () => {
+    formatMoneyInput(money);
+    calculate();
+});
+
+cost.addEventListener("blur", () => {
+    formatMoneyInput(cost);
+    calculate();
+});
+
+// Fast Open: 3 segundos
+fastButton.addEventListener("click", () => {
+    seconds.value = 3;
+    calculate();
+});
+
+// Normal: 5,5 segundos
+normalButton.addEventListener("click", () => {
+    seconds.value = 5.5;
+    calculate();
+});
+
 // Atualização automática dos cálculos
 [money, stars, seconds, cost].forEach(input => {
     input.addEventListener("input", calculate);
@@ -91,16 +165,15 @@ function calculate() {
 
 // Restaurar configurações padrão
 function resetCalculator() {
-
-    money.value = 100000000;
+    money.value = "100M";
     stars.value = 2;
     seconds.value = 5.5;
-    cost.value = 200000;
+    cost.value = "200K";
 
     calculate();
 }
 
 resetButton.addEventListener("click", resetCalculator);
 
-// Executar ao abrir a página
+// Cálculo inicial
 calculate();

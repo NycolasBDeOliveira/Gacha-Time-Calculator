@@ -179,3 +179,17 @@ button:hover {
         margin: auto 0;
     }
 }
+
+
+.time-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.time-buttons button {
+    margin-top: 0;
+    padding: 10px 5px;
+    font-size: 12px;
+}
