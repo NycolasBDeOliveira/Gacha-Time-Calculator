@@ -2,7 +2,7 @@
 const money = document.getElementById("money");
 const stars = document.getElementById("stars");
 const seconds = document.getElementById("seconds");
-const cost = document.getElementById("cost");
+const world = document.getElementById("world");
 
 const resetButton = document.getElementById("resetButton");
 const fastButton = document.getElementById("fastButton");
@@ -72,13 +72,12 @@ function calculate() {
     const availableMoney = parseMoney(money.value);
     const starsPerSpin = Number(stars.value);
     const timePerSpin = Number(seconds.value);
-    const costPerStar = parseMoney(cost.value);
+    const costPerStar = Number(world.value);
 
     if (
         money.value.trim() === "" ||
         stars.value.trim() === "" ||
         seconds.value.trim() === "" ||
-        cost.value.trim() === "" ||
         !Number.isFinite(availableMoney) ||
         !Number.isFinite(starsPerSpin) ||
         !Number.isFinite(timePerSpin) ||
@@ -135,14 +134,9 @@ function calculate() {
         format(remainingMoney);
 }
 
-// Conversão automática ao sair do campo
+// Conversão automática do dinheiro disponível
 money.addEventListener("blur", () => {
     formatMoneyInput(money);
-    calculate();
-});
-
-cost.addEventListener("blur", () => {
-    formatMoneyInput(cost);
     calculate();
 });
 
@@ -159,16 +153,17 @@ normalButton.addEventListener("click", () => {
 });
 
 // Atualização automática dos cálculos
-[money, stars, seconds, cost].forEach(input => {
+[money, stars, seconds, world].forEach(input => {
     input.addEventListener("input", calculate);
+    input.addEventListener("change", calculate);
 });
 
 // Restaurar configurações padrão
 function resetCalculator() {
-    money.value = "100M";
-    stars.value = 2;
+    money.value = "0";
+    stars.value = 1;
     seconds.value = 5.5;
-    cost.value = "200K";
+    world.value = "80";
 
     calculate();
 }

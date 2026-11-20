@@ -193,3 +193,20 @@ button:hover {
     padding: 10px 5px;
     font-size: 12px;
 }
+
+
+select {
+    width: 100%;
+    padding: 13px;
+    border-radius: 9px;
+    border: 1px solid #34394e;
+    background: #10131e;
+    color: #fff;
+    font-size: 15px;
+    outline: none;
+    transition: .2s;
+}
+
+select:focus {
+    border-color: #8b5cf6;
+}

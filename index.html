@@ -22,7 +22,7 @@
             <input
                 type="text"
                 id="money"
-                value="100M"
+                value="0"
                 placeholder="Ex: 100K, 10M, 1B"
             >
         </div>
@@ -33,7 +33,7 @@
                 <input
                     type="number"
                     id="stars"
-                    value="2"
+                    value="1"
                     min="1"
                 >
             </div>
@@ -61,13 +61,15 @@
         </div>
 
         <div class="field">
-            <label for="cost">💰 Custo por estrela</label>
-            <input
-                type="text"
-                id="cost"
-                value="200K"
-                placeholder="Ex: 100K, 1M, 1B"
-            >
+            <label for="world">🌎 Mundo / Custo por estrela</label>
+            <select id="world">
+                <option value="80" selected>Mundo 1 — 80</option>
+                <option value="300">Mundo 2 — 300</option>
+                <option value="2500">Mundo 3 — 2,5K</option>
+                <option value="12500">Mundo 4 — 12,5K</option>
+                <option value="50000">Mundo 5 — 50K</option>
+                <option value="200000">Mundo 6 — 200K</option>
+            </select>
         </div>
 
         <div class="results">
