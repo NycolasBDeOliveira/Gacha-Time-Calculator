@@ -2,6 +2,7 @@
 const money = document.getElementById("money");
 const stars = document.getElementById("stars");
 const speed = document.getElementById("speed");
+const vip = document.getElementById("vip");
 const world = document.getElementById("world");
 
 const resetButton = document.getElementById("resetButton");
@@ -70,6 +71,7 @@ function calculate() {
     const availableMoney = parseMoney(money.value);
     const starsPerOpening = Number(stars.value);
     const speedMultiplier = Number(speed.value);
+    const vipActive = Number(vip.value);
     const costPerStar = Number(world.value);
 
     // Validação dos campos
@@ -79,10 +81,12 @@ function calculate() {
         !Number.isFinite(availableMoney) ||
         !Number.isFinite(starsPerOpening) ||
         !Number.isFinite(speedMultiplier) ||
+        !Number.isFinite(vipActive) ||
         !Number.isFinite(costPerStar) ||
         availableMoney < 0 ||
         starsPerOpening <= 0 ||
         speedMultiplier <= 0 ||
+        (vipActive !== 0 && vipActive !== 1) ||
         costPerStar <= 0
     ) {
         document.getElementById("time").textContent = "--";
@@ -97,8 +101,14 @@ function calculate() {
     const baseOpeningTime = 5.15;
     const effectiveOpeningTime = baseOpeningTime / speedMultiplier;
 
+    // Desconto VIP de 25%
+    const discountMultiplier = vipActive === 1 ? 0.75 : 1;
+
+    // Custo de cada estrela com desconto
+    const discountedCostPerStar = costPerStar * discountMultiplier;
+
     // Custo de cada abertura
-    const costPerOpening = starsPerOpening * costPerStar;
+    const costPerOpening = starsPerOpening * discountedCostPerStar;
 
     // Quantidade de aberturas possíveis
     const totalOpenings = Math.floor(
@@ -147,7 +157,7 @@ money.addEventListener("blur", () => {
 });
 
 // Atualização automática dos cálculos
-[money, stars, speed, world].forEach(input => {
+[money, stars, speed, vip, world].forEach(input => {
     input.addEventListener("input", calculate);
     input.addEventListener("change", calculate);
 });
@@ -157,6 +167,7 @@ function resetCalculator() {
     money.value = "0";
     stars.value = 1;
     speed.value = "1";
+    vip.value = "0";
     world.value = "80";
 
     calculate();
