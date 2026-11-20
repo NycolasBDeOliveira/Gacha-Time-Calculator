@@ -1,12 +1,10 @@
 
 const money = document.getElementById("money");
 const stars = document.getElementById("stars");
-const seconds = document.getElementById("seconds");
+const speed = document.getElementById("speed");
 const world = document.getElementById("world");
 
 const resetButton = document.getElementById("resetButton");
-const fastButton = document.getElementById("fastButton");
-const normalButton = document.getElementById("normalButton");
 
 // Formatação de números
 const format = value =>
@@ -58,7 +56,7 @@ function abbreviateMoney(value) {
     return value.toString();
 }
 
-// Formata o campo ao sair dele
+// Formata o dinheiro ao sair do campo
 function formatMoneyInput(input) {
     const value = parseMoney(input.value);
 
@@ -70,21 +68,21 @@ function formatMoneyInput(input) {
 // Função principal de cálculo
 function calculate() {
     const availableMoney = parseMoney(money.value);
-    const starsPerSpin = Number(stars.value);
-    const timePerSpin = Number(seconds.value);
+    const starsPerOpening = Number(stars.value);
+    const speedMultiplier = Number(speed.value);
     const costPerStar = Number(world.value);
 
+    // Validação dos campos
     if (
         money.value.trim() === "" ||
         stars.value.trim() === "" ||
-        seconds.value.trim() === "" ||
         !Number.isFinite(availableMoney) ||
-        !Number.isFinite(starsPerSpin) ||
-        !Number.isFinite(timePerSpin) ||
+        !Number.isFinite(starsPerOpening) ||
+        !Number.isFinite(speedMultiplier) ||
         !Number.isFinite(costPerStar) ||
         availableMoney < 0 ||
-        starsPerSpin <= 0 ||
-        timePerSpin <= 0 ||
+        starsPerOpening <= 0 ||
+        speedMultiplier <= 0 ||
         costPerStar <= 0
     ) {
         document.getElementById("time").textContent = "--";
@@ -95,40 +93,48 @@ function calculate() {
         return;
     }
 
-    const costPerSpin = starsPerSpin * costPerStar;
+    // Tempo de abertura com bônus de velocidade
+    const baseOpeningTime = 5.15;
+    const effectiveOpeningTime = baseOpeningTime / speedMultiplier;
 
-    const totalSpins = Math.floor(
-        availableMoney / costPerSpin
+    // Custo de cada abertura
+    const costPerOpening = starsPerOpening * costPerStar;
+
+    // Quantidade de aberturas possíveis
+    const totalOpenings = Math.floor(
+        availableMoney / costPerOpening
     );
 
-    const totalStars = totalSpins * starsPerSpin;
+    // Tempo total de funcionamento
+    const totalTime = totalOpenings * effectiveOpeningTime;
 
-    const remainingMoney =
-        availableMoney - (totalSpins * costPerSpin);
+    // Conversão para horas, minutos e segundos
+    const displayHours = Math.floor(totalTime / 3600);
+    const displayMinutes = Math.floor((totalTime % 3600) / 60);
+    const displaySeconds = Math.floor(totalTime % 60);
 
-    const totalTime = totalSpins * timePerSpin;
+    // Total de estrelas
+    const totalStars = totalOpenings * starsPerOpening;
 
-    // Conversão do tempo
-    const hours = Math.floor(totalTime / 3600);
+    // Gasto total
+    const totalCost = totalOpenings * costPerOpening;
 
-    const minutes = Math.floor(
-        (totalTime % 3600) / 60
-    );
+    // Dinheiro restante
+    const remainingMoney = availableMoney - totalCost;
 
-    const secs = Math.floor(totalTime % 60);
-
-    // Atualização dos resultados
+    // Resultado principal
     document.getElementById("time").textContent =
-        `${format(hours)}h ${format(minutes)}min ${format(secs)}s`;
+        `${format(displayHours)}h ${format(displayMinutes)}min ${format(displaySeconds)}s`;
 
+    // Estatísticas
     document.getElementById("spins").textContent =
-        format(totalSpins);
+        format(totalOpenings);
 
     document.getElementById("totalStars").textContent =
         format(totalStars);
 
     document.getElementById("spinCost").textContent =
-        format(costPerSpin);
+        format(totalCost);
 
     document.getElementById("remaining").textContent =
         format(remainingMoney);
@@ -140,20 +146,8 @@ money.addEventListener("blur", () => {
     calculate();
 });
 
-// Fast Open: 3 segundos
-fastButton.addEventListener("click", () => {
-    seconds.value = 3;
-    calculate();
-});
-
-// Normal: 5,5 segundos
-normalButton.addEventListener("click", () => {
-    seconds.value = 5.5;
-    calculate();
-});
-
 // Atualização automática dos cálculos
-[money, stars, seconds, world].forEach(input => {
+[money, stars, speed, world].forEach(input => {
     input.addEventListener("input", calculate);
     input.addEventListener("change", calculate);
 });
@@ -162,7 +156,7 @@ normalButton.addEventListener("click", () => {
 function resetCalculator() {
     money.value = "0";
     stars.value = 1;
-    seconds.value = 5.5;
+    speed.value = "1";
     world.value = "80";
 
     calculate();

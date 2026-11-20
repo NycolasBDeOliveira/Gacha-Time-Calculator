@@ -29,7 +29,7 @@
 
         <div class="grid">
             <div class="field">
-                <label for="stars">⭐ Estrelas por giro</label>
+                <label for="stars">⭐ Estrelas por abertura</label>
                 <input
                     type="number"
                     id="stars"
@@ -37,61 +37,48 @@
                     min="1"
                 >
             </div>
+        </div>
 
-            <div class="field">
-                <label for="seconds">⏱️ Tempo por giro (segundos)</label>
-                <input
-                    type="number"
-                    id="seconds"
-                    value="5.5"
-                    min="0.001"
-                    step="0.1"
-                >
-
-                <div class="time-buttons">
-                    <button type="button" id="fastButton">
-                        ⚡ Fast Open
-                    </button>
-
-                    <button type="button" id="normalButton">
-                        ⏱️ Normal
-                    </button>
-                </div>
-            </div>
+        <div class="field">
+            <label for="speed">⚡ Velocidade</label>
+            <select id="speed">
+                <option value="1" selected>Normal (1x)</option>
+                <option value="2">Fast Open (2x)</option>
+                <option value="1.25">Bônus 25% (1,25x)</option>
+                <option value="2.5">Fast Open + 25% (2,5x)</option>
+            </select>
         </div>
 
         <div class="field">
             <label for="world">🌎 Mundo / Custo por estrela</label>
             <select id="world">
-                <option value="80" selected>Mundo 1 — 80</option>
-                <option value="300">Mundo 2 — 300</option>
-                <option value="2500">Mundo 3 — 2,5K</option>
-                <option value="12500">Mundo 4 — 12,5K</option>
-                <option value="50000">Mundo 5 — 50K</option>
-                <option value="200000">Mundo 6 — 200K</option>
+                <option value="80" selected>Namek (1) — 80</option>
+                <option value="300">Naruto (2) — 300</option>
+                <option value="2500">Attack on Titan (3) — 2,5K</option>
+                <option value="12500">Bleach (4) — 12,5K</option>
+                <option value="50000">Demon Slayer (5) — 50K</option>
+                <option value="200000">Hunter x Hunter (6) — 200K</option>
             </select>
         </div>
 
         <div class="results">
-            <p class="result-title">⏳ TEMPO TOTAL DE AUTONOMIA</p>
+            <p class="result-title">⏳ RESULTADO DO CÁLCULO</p>
 
-            <div class="time" id="time">
-                00h 00min 00s
-            </div>
+            <div class="time" id="time">0h 00min 00s</div>
 
             <div class="stats">
                 <div class="stat">
-                    <span>🎰 Total de giros</span>
+                    <span>🎰 Total de aberturas</span>
                     <strong id="spins">0</strong>
                 </div>
 
                 <div class="stat">
-                    <span>🌟 Estrelas obtidas</span>
+                    <span>🌟 Total de estrelas</span>
                     <strong id="totalStars">0</strong>
                 </div>
 
                 <div class="stat">
-                    <span>💸 Custo por giro</span>
+                    <span>💰 Gasto total</span>
                     <strong id="spinCost">0</strong>
                 </div>
 
