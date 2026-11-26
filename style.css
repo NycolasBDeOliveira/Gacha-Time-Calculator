@@ -10,150 +10,330 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
-    background: #101116;
-    color: #fff;
+    padding: 24px;
+    background: #0d0f16;
+    color: #f1f1f5;
     font-family: Arial, sans-serif;
 }
 
+/* CONTAINER PRINCIPAL */
+
 .container {
     width: 100%;
-    max-width: 480px;
+    max-width: 600px;
     padding: 30px;
-    background: #191c28;
-    border: 1px solid #34394e;
-    border-radius: 15px;
+    background: #171a24;
+    border: 1px solid #292e3d;
+    border-radius: 16px;
 }
 
-h1 {
-    text-align: center;
-    font-size: 25px;
-    margin-bottom: 8px;
+/* CABEÇALHO */
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
 }
+
+.header h1 {
+    font-size: 23px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* BOTÕES DE IDIOMA */
+
+.language-switch {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    flex-shrink: 0;
+    padding: 4px;
+    background: #10131c;
+    border: 1px solid #303648;
+    border-radius: 10px;
+}
+
+.language-switch button {
+    width: auto;
+    min-width: 48px;
+    height: 32px;
+    margin: 0;
+    padding: 0 11px;
+
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 7px;
+
+    color: #929aaf;
+    font-size: 11px;
+    font-weight: 700;
+
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.language-switch button:hover {
+    background: #252a3a;
+    color: #fff;
+}
+
+.language-switch button.active {
+    background: #7138d4;
+    border-color: #9565ed;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(113, 56, 212, .25);
+}
+
+/* SUBTÍTULO */
 
 .subtitle {
     text-align: center;
-    color: #a5a9ba;
+    color: #858da3;
     font-size: 13px;
-    margin-bottom: 28px;
+    margin-bottom: 25px;
 }
 
+/* CAMPOS E OPÇÕES */
+
 .field {
-    margin-bottom: 20px;
+    width: 100%;
+    margin-bottom: 17px;
 }
 
 label {
     display: block;
-    margin-bottom: 9px;
+    margin-bottom: 8px;
     font-size: 13px;
-    color: #dce0f0;
+    font-weight: 600;
+    color: #c8ccda;
 }
 
 input,
 select {
+    display: block;
     width: 100%;
-    padding: 13px;
+    height: 44px;
+    padding: 0 14px;
+
     border-radius: 9px;
-    border: 1px solid #34394e;
-    background: #10131e;
-    color: #fff;
-    font-size: 15px;
+    border: 1px solid #303648;
+
+    background: #10131c;
+    color: #f1f1f5;
+
+    font-size: 14px;
     outline: none;
-    transition: .2s;
+
+    transition: border-color .2s, background .2s;
 }
 
 input:focus,
 select:focus {
     border-color: #8b5cf6;
+    background: #141724;
 }
 
-.grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
+select {
+    cursor: pointer;
 }
+
+/* CAMPO DE ESTRELAS */
+
+.stars-field {
+    width: 100%;
+    margin-bottom: 17px;
+}
+
+.stars-input {
+    width: 100%;
+    height: 44px;
+    margin-left: 0;
+    padding: 0 14px;
+
+    font-size: 14px;
+    font-weight: 400;
+
+    border-color: #303648;
+    background: #10131c;
+}
+
+.stars-input:focus {
+    border-color: #8b5cf6;
+    background: #141724;
+}
+
+/* RESULTADOS */
 
 .results {
-    margin-top: 25px;
+    width: 100%;
+    margin-top: 24px;
     padding: 20px;
-    background: #222637;
+
+    background: #202433;
+    border: 1px solid #2d3345;
     border-radius: 12px;
 }
 
 .result-title {
     text-align: center;
-    color: #c5c8d8;
-    font-size: 13px;
+    color: #9da5ba;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .6px;
     margin-bottom: 10px;
 }
 
 .time {
     text-align: center;
     font-size: 30px;
-    font-weight: bold;
+    font-weight: 700;
     color: #a78bfa;
-    margin-bottom: 22px;
+    margin-bottom: 20px;
     overflow-wrap: anywhere;
 }
 
+/* QUADROS DE ESTATÍSTICAS */
+
 .stats {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
 }
 
 .stat {
     min-width: 0;
-    padding: 14px;
-    background: #191c28;
-    border-radius: 10px;
+    padding: 15px;
+
+    background: #171a24;
+    border: 1px solid #292e3d;
+    border-radius: 9px;
 }
 
 .stat span {
     display: block;
-    color: #aeb5ca;
+    color: #929aaf;
     font-size: 11px;
-    margin-bottom: 7px;
+    margin-bottom: 8px;
 }
 
 .stat strong {
     display: block;
-    font-size: 16px;
+    color: #f1f1f5;
+    font-size: 15px;
+    font-weight: 700;
     overflow-wrap: anywhere;
 }
 
-button {
+/* BOTÃO DE RESTAURAÇÃO */
+
+#resetButton {
+    display: block;
     width: 100%;
-    margin-top: 20px;
-    padding: 13px;
-    border: none;
+    height: 44px;
+    margin-top: 18px;
+
+    border: 1px solid #7441d5;
     border-radius: 9px;
-    background: #7c3aed;
+
+    background: #7138d4;
     color: #fff;
-    font-size: 14px;
-    font-weight: bold;
+
+    font-size: 13px;
+    font-weight: 700;
+
     cursor: pointer;
-    transition: .2s;
+    transition: background .2s, transform .2s;
 }
 
-button:hover {
-    background: #6d28d9;
+#resetButton:hover {
+    background: #824bea;
 }
+
+#resetButton:active {
+    transform: scale(.98);
+}
+
+/* RODAPÉ */
 
 .footer {
     text-align: center;
-    margin-top: 20px;
-    color: #777e94;
+    margin-top: 18px;
+    color: #687087;
     font-size: 11px;
 }
 
-@media (max-width: 400px) {
+/* TABLETS E TELAS MENORES */
+
+@media (max-width: 650px) {
+    body {
+        padding: 16px;
+        align-items: flex-start;
+    }
+
     .container {
-        padding: 20px;
+        max-width: 100%;
+        padding: 22px;
+    }
+
+    .header {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .header h1 {
+        font-size: 21px;
+    }
+
+    .language-switch {
+        margin-left: auto;
+    }
+}
+
+/* CELULARES */
+
+@media (max-width: 420px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 18px;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .header h1 {
+        font-size: 21px;
+    }
+
+    .language-switch {
+        margin: 0;
+        justify-content: center;
+    }
+
+    .language-switch button {
+        min-width: 55px;
+        height: 34px;
+    }
+
+    .subtitle {
+        font-size: 12px;
+        margin-bottom: 22px;
     }
 
     .time {
         font-size: 25px;
+    }
+
+    .results {
+        padding: 14px;
     }
 
     .stat {
@@ -161,6 +341,6 @@ button:hover {
     }
 
     .stat strong {
-        font-size: 14px;
+        font-size: 13px;
     }
 }
