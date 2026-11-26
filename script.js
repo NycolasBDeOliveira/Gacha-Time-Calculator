@@ -1,5 +1,6 @@
 
 const money = document.getElementById("money");
+const hours = document.getElementById("hours");
 const stars = document.getElementById("stars");
 const speed = document.getElementById("speed");
 const vip = document.getElementById("vip");
@@ -7,9 +8,111 @@ const world = document.getElementById("world");
 
 const resetButton = document.getElementById("resetButton");
 
+// Traduções
+const translations = {
+    pt: {
+        subtitle: "Calcule quanto dinheiro você precisa para roletar.",
+        moneyLabel: "💸 Dinheiro disponível",
+        moneyPlaceholder: "Ex: 100K, 10M, 1B",
+        hoursLabel: "⏰ Horas desejadas",
+        hour: "Hora",
+        hours: "Horas",
+        starsLabel: "⭐ Estrelas por abertura",
+        speedLabel: "⚡ Velocidade",
+        vipLabel: "👑 Gamepass VIP",
+        worldLabel: "🌎 Mundo / Custo por estrela",
+        resultTitle: "⏳ RESULTADO DO CÁLCULO",
+        spinsLabel: "🎰 Total de aberturas",
+        totalStarsLabel: "🌟 Total de estrelas",
+        costLabel: "💰 Dinheiro necessário",
+        remainingLabel: "🪙 Diferença",
+        resetButton: "🔄 Restaurar configurações",
+        footer: "Gacha Time Calculator • Cálculo automático",
+        normal: "Normal",
+        fast: "Fast Open",
+        bonus: "25%",
+        fastBonus: "Fast Open + 25%",
+        disabled: "Desativado",
+        enabled: "Ativado (25% de desconto)",
+        worlds: ["Mundo 1", "Mundo 2", "Mundo 3", "Mundo 4", "Mundo 5", "Mundo 6", "Mundo 7"],
+        surplus: "sobrando",
+        missing: "faltando",
+        locale: "pt-BR"
+    },
+
+    en: {
+        subtitle: "Calculate how much money you need to roll.",
+        moneyLabel: "💸 Available Money",
+        moneyPlaceholder: "Ex: 100K, 10M, 1B",
+        hoursLabel: "⏰ Desired Hours",
+        hour: "Hour",
+        hours: "Hours",
+        starsLabel: "⭐ Stars per Opening",
+        speedLabel: "⚡ Speed",
+        vipLabel: "👑 VIP Gamepass",
+        worldLabel: "🌎 World / Cost per Star",
+        resultTitle: "⏳ CALCULATION RESULTS",
+        spinsLabel: "🎰 Total Openings",
+        totalStarsLabel: "🌟 Total Stars",
+        costLabel: "💰 Required Money",
+        remainingLabel: "🪙 Difference",
+        resetButton: "🔄 Reset Settings",
+        footer: "Gacha Time Calculator • Automatic calculation",
+        normal: "Normal",
+        fast: "Fast Open",
+        bonus: "25%",
+        fastBonus: "Fast Open + 25%",
+        disabled: "Disabled",
+        enabled: "Enabled (25% discount)",
+        worlds: ["World 1", "World 2", "World 3", "World 4", "World 5", "World 6", "World 7"],
+        surplus: "left over",
+        missing: "short",
+        locale: "en-US"
+    },
+
+    es: {
+        subtitle: "Calcula cuánto dinero necesitas para hacer tiradas.",
+        moneyLabel: "💸 Dinero disponible",
+        moneyPlaceholder: "Ej: 100K, 10M, 1B",
+        hoursLabel: "⏰ Horas deseadas",
+        hour: "Hora",
+        hours: "Horas",
+        starsLabel: "⭐ Estrellas por apertura",
+        speedLabel: "⚡ Velocidad",
+        vipLabel: "👑 Gamepass VIP",
+        worldLabel: "🌎 Mundo / Costo por estrella",
+        resultTitle: "⏳ RESULTADO DEL CÁLCULO",
+        spinsLabel: "🎰 Total de aperturas",
+        totalStarsLabel: "🌟 Total de estrellas",
+        costLabel: "💰 Dinero necesario",
+        remainingLabel: "🪙 Diferencia",
+        resetButton: "🔄 Restaurar configuración",
+        footer: "Gacha Time Calculator • Cálculo automático",
+        normal: "Normal",
+        fast: "Apertura rápida",
+        bonus: "25%",
+        fastBonus: "Apertura rápida + 25%",
+        disabled: "Desactivado",
+        enabled: "Activado (25% de descuento)",
+        worlds: ["Mundo 1", "Mundo 2", "Mundo 3", "Mundo 4", "Mundo 5", "Mundo 6", "Mundo 7"],
+        surplus: "sobrando",
+        missing: "faltante",
+        locale: "es-ES"
+    }
+};
+
+let currentLanguage = localStorage.getItem("gachaLanguage") || "pt";
+
+if (!translations[currentLanguage]) {
+    currentLanguage = "pt";
+}
+
 // Formatação de números
-const format = value =>
-    Math.floor(value).toLocaleString("pt-BR");
+function format(value) {
+    return Math.floor(value).toLocaleString(
+        translations[currentLanguage].locale
+    );
+}
 
 // Converte K, M e B em valores numéricos
 function parseMoney(value) {
@@ -66,75 +169,157 @@ function formatMoneyInput(input) {
     }
 }
 
-// Função principal de cálculo
+// Traduz a interface
+function translatePage(language) {
+    const t = translations[language];
+
+    if (!t) return;
+
+    currentLanguage = language;
+    localStorage.setItem("gachaLanguage", language);
+
+    document.documentElement.lang = t.locale;
+
+    // Textos da interface
+    document.querySelectorAll("[data-i18n]").forEach(element => {
+        const key = element.dataset.i18n;
+
+        if (t[key]) {
+            element.textContent = t[key];
+        }
+    });
+
+    // Placeholders
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(element => {
+        const key = element.dataset.i18nPlaceholder;
+
+        if (t[key]) {
+            element.placeholder = t[key];
+        }
+    });
+
+    // Opções de horas
+    Array.from(hours.options).forEach(option => {
+        const value = Number(option.value);
+
+        option.textContent =
+            `${value} ${value === 1 ? t.hour : t.hours}`;
+    });
+
+    // Velocidades
+    speed.options[0].textContent = `${t.normal} (1x)`;
+    speed.options[1].textContent = `${t.fast} (2x)`;
+    speed.options[2].textContent = `${t.bonus} (1.25x)`;
+    speed.options[3].textContent = `${t.fastBonus} (2.5x)`;
+
+    // VIP
+    vip.options[0].textContent = t.disabled;
+    vip.options[1].textContent = t.enabled;
+
+    // Mundos
+    const prices = [
+        "80",
+        "300",
+        "2.5K",
+        "12.5K",
+        "50K",
+        "200K",
+        "1.150M"
+    ];
+
+    Array.from(world.options).forEach((option, index) => {
+        option.textContent = `${t.worlds[index]} — ${prices[index]}`;
+    });
+
+    // Botões de idioma
+    document.querySelectorAll(".language-btn").forEach(button => {
+        button.classList.toggle(
+            "active",
+            button.dataset.lang === language
+        );
+    });
+
+    calculate();
+}
+
+// Cálculo principal
 function calculate() {
     const availableMoney = parseMoney(money.value);
+    const selectedHours = Number(hours.value);
     const starsPerOpening = Number(stars.value);
     const speedMultiplier = Number(speed.value);
     const vipActive = Number(vip.value);
     const costPerStar = Number(world.value);
 
-    // Validação dos campos
+    const elements = [
+        "time",
+        "spins",
+        "totalStars",
+        "spinCost",
+        "remaining"
+    ];
+
+    // Validação
     if (
         money.value.trim() === "" ||
         stars.value.trim() === "" ||
         !Number.isFinite(availableMoney) ||
+        !Number.isFinite(selectedHours) ||
         !Number.isFinite(starsPerOpening) ||
+        !Number.isInteger(starsPerOpening) ||
         !Number.isFinite(speedMultiplier) ||
         !Number.isFinite(vipActive) ||
         !Number.isFinite(costPerStar) ||
         availableMoney < 0 ||
+        selectedHours <= 0 ||
         starsPerOpening <= 0 ||
         speedMultiplier <= 0 ||
         (vipActive !== 0 && vipActive !== 1) ||
         costPerStar <= 0
     ) {
-        document.getElementById("time").textContent = "--";
-        document.getElementById("spins").textContent = "--";
-        document.getElementById("totalStars").textContent = "--";
-        document.getElementById("spinCost").textContent = "--";
-        document.getElementById("remaining").textContent = "--";
+        elements.forEach(id => {
+            document.getElementById(id).textContent = "--";
+        });
+
         return;
     }
 
-    // Tempo de abertura com bônus de velocidade
+    // Tempo de cada abertura
     const baseOpeningTime = 5.15;
     const effectiveOpeningTime = baseOpeningTime / speedMultiplier;
 
     // Desconto VIP de 25%
     const discountMultiplier = vipActive === 1 ? 0.75 : 1;
-
-    // Custo de cada estrela com desconto
     const discountedCostPerStar = costPerStar * discountMultiplier;
 
     // Custo de cada abertura
     const costPerOpening = starsPerOpening * discountedCostPerStar;
 
-    // Quantidade de aberturas possíveis
+    // Quantidade de aberturas completas no período escolhido
     const totalOpenings = Math.floor(
-        availableMoney / costPerOpening
+        (selectedHours * 3600) / effectiveOpeningTime
     );
 
-    // Tempo total de funcionamento
+    // Tempo efetivo de abertura
     const totalTime = totalOpenings * effectiveOpeningTime;
 
-    // Conversão para horas, minutos e segundos
-    const displayHours = Math.floor(totalTime / 3600);
-    const displayMinutes = Math.floor((totalTime % 3600) / 60);
-    const displaySeconds = Math.floor(totalTime % 60);
+    // Dinheiro necessário
+    const requiredMoney = totalOpenings * costPerOpening;
 
     // Total de estrelas
     const totalStars = totalOpenings * starsPerOpening;
 
-    // Gasto total
-    const totalCost = totalOpenings * costPerOpening;
+    // Diferença entre dinheiro disponível e necessário
+    const difference = availableMoney - requiredMoney;
 
-    // Dinheiro restante
-    const remainingMoney = availableMoney - totalCost;
+    // Conversão do tempo
+    const displayHours = Math.floor(totalTime / 3600);
+    const displayMinutes = Math.floor((totalTime % 3600) / 60);
+    const displaySeconds = Math.floor(totalTime % 60);
 
     // Resultado principal
     document.getElementById("time").textContent =
-        `${format(displayHours)}h ${format(displayMinutes)}min ${format(displaySeconds)}s`;
+        `${format(displayHours)}h ${String(displayMinutes).padStart(2, "0")}min ${String(displaySeconds).padStart(2, "0")}s`;
 
     // Estatísticas
     document.getElementById("spins").textContent =
@@ -144,20 +329,32 @@ function calculate() {
         format(totalStars);
 
     document.getElementById("spinCost").textContent =
-        format(totalCost);
+        format(requiredMoney);
+
+    // Diferença de dinheiro
+    const t = translations[currentLanguage];
 
     document.getElementById("remaining").textContent =
-        format(remainingMoney);
+        difference >= 0
+            ? `+${format(difference)} ${t.surplus}`
+            : `-${format(Math.abs(difference))} ${t.missing}`;
 }
 
-// Conversão automática do dinheiro disponível
+// Eventos dos botões de idioma
+document.querySelectorAll(".language-btn").forEach(button => {
+    button.addEventListener("click", () => {
+        translatePage(button.dataset.lang);
+    });
+});
+
+// Formatação automática do dinheiro
 money.addEventListener("blur", () => {
     formatMoneyInput(money);
     calculate();
 });
 
 // Atualização automática dos cálculos
-[money, stars, speed, vip, world].forEach(input => {
+[money, hours, stars, speed, vip, world].forEach(input => {
     input.addEventListener("input", calculate);
     input.addEventListener("change", calculate);
 });
@@ -165,7 +362,8 @@ money.addEventListener("blur", () => {
 // Restaurar configurações padrão
 function resetCalculator() {
     money.value = "0";
-    stars.value = 1;
+    hours.value = "1";
+    stars.value = "1";
     speed.value = "1";
     vip.value = "0";
     world.value = "80";
@@ -175,5 +373,5 @@ function resetCalculator() {
 
 resetButton.addEventListener("click", resetCalculator);
 
-// Cálculo inicial
-calculate();
+// Inicialização
+translatePage(currentLanguage);
