@@ -14,33 +14,59 @@
 <body>
 
     <div class="container">
-        <h1>🎰 Gacha Calculator</h1>
-        <p class="subtitle">Calcule quanto tempo seu dinheiro vai durar.</p>
+
+        <div class="header">
+            <h1>🎰 Gacha Calculator</h1>
+
+            <div class="language-switch">
+                <button type="button" class="language-btn active" data-lang="pt">🇧🇷 PT</button>
+                <button type="button" class="language-btn" data-lang="en">🇺🇸 EN</button>
+                <button type="button" class="language-btn" data-lang="es">🇪🇸 ES</button>
+            </div>
+        </div>
+
+        <p class="subtitle" data-i18n="subtitle">
+            Calcule quanto dinheiro você precisa para roletar.
+        </p>
 
         <div class="field">
-            <label for="money">💸 Dinheiro disponível</label>
+            <label for="money" data-i18n="moneyLabel">💸 Dinheiro disponível</label>
             <input
                 type="text"
                 id="money"
                 value="0"
                 placeholder="Ex: 100K, 10M, 1B"
+                data-i18n-placeholder="moneyPlaceholder"
             >
         </div>
 
-        <div class="grid">
-            <div class="field">
-                <label for="stars">⭐ Estrelas por abertura</label>
-                <input
-                    type="number"
-                    id="stars"
-                    value="1"
-                    min="1"
-                >
-            </div>
+        <div class="field">
+            <label for="hours" data-i18n="hoursLabel">⏰ Horas desejadas</label>
+            <select id="hours">
+                <option value="1" selected>1 Hora</option>
+                <option value="2">2 Horas</option>
+                <option value="4">4 Horas</option>
+                <option value="8">8 Horas</option>
+                <option value="12">12 Horas</option>
+                <option value="16">16 Horas</option>
+                <option value="24">24 Horas</option>
+            </select>
+        </div>
+
+        <div class="field stars-field">
+            <label for="stars" data-i18n="starsLabel">⭐ Estrelas por abertura</label>
+            <input
+                type="number"
+                id="stars"
+                class="stars-input"
+                value="1"
+                min="1"
+                step="1"
+            >
         </div>
 
         <div class="field">
-            <label for="speed">⚡ Velocidade</label>
+            <label for="speed" data-i18n="speedLabel">⚡ Velocidade</label>
             <select id="speed">
                 <option value="1" selected>Normal (1x)</option>
                 <option value="2">Fast Open (2x)</option>
@@ -50,7 +76,7 @@
         </div>
 
         <div class="field">
-            <label for="vip">👑 Gamepass VIP</label>
+            <label for="vip" data-i18n="vipLabel">👑 Gamepass VIP</label>
             <select id="vip">
                 <option value="0" selected>Desativado</option>
                 <option value="1">Ativado (25% de desconto)</option>
@@ -58,53 +84,60 @@
         </div>
 
         <div class="field">
-            <label for="world">🌎 Mundo / Custo por estrela</label>
+            <label for="world" data-i18n="worldLabel">🌎 Mundo / Custo por estrela</label>
             <select id="world">
-                <option value="80" selected>Mundo 1 — 80</option>
+                <option value="80">Mundo 1 — 80</option>
                 <option value="300">Mundo 2 — 300</option>
                 <option value="2500">Mundo 3 — 2,5K</option>
                 <option value="12500">Mundo 4 — 12,5K</option>
                 <option value="50000">Mundo 5 — 50K</option>
                 <option value="200000">Mundo 6 — 200K</option>
+<<<<<<< HEAD
                 <option value="1150000">Mundo 7 - 1.15M </option>
+=======
+                <option value="1150000">Mundo 7 — 1.150M</option>
+>>>>>>> a6cb393 (Idiomas)
             </select>
         </div>
 
         <div class="results">
-            <p class="result-title">⏳ RESULTADO DO CÁLCULO</p>
+            <p class="result-title" data-i18n="resultTitle">
+                ⏳ RESULTADO DO CÁLCULO
+            </p>
 
             <div class="time" id="time">0h 00min 00s</div>
 
             <div class="stats">
                 <div class="stat">
-                    <span>🎰 Total de aberturas</span>
+                    <span data-i18n="spinsLabel">🎰 Total de aberturas</span>
                     <strong id="spins">0</strong>
                 </div>
 
                 <div class="stat">
-                    <span>🌟 Total de estrelas</span>
+                    <span data-i18n="totalStarsLabel">🌟 Total de estrelas</span>
                     <strong id="totalStars">0</strong>
                 </div>
 
                 <div class="stat">
-                    <span>💰 Gasto total</span>
+                    <span data-i18n="costLabel">💰 Dinheiro necessário</span>
                     <strong id="spinCost">0</strong>
                 </div>
 
                 <div class="stat">
-                    <span>🪙 Dinheiro restante</span>
+                    <span data-i18n="remainingLabel">🪙 Diferença</span>
                     <strong id="remaining">0</strong>
                 </div>
             </div>
         </div>
 
-        <button id="resetButton">
+        <button id="resetButton" data-i18n="resetButton">
             🔄 Restaurar configurações
         </button>
 
-        <p class="footer">
+        <p class="footer" data-i18n="footer">
             Gacha Time Calculator • Cálculo automático
         </p>
+
     </div>
 
 </body>
